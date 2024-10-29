@@ -1,0 +1,39 @@
+<!-- my_app/templates/my_app/signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+    <h1>Sign Up</h1>
+    <form method="POST" action="{% url 'signup' %}" enctype="multipart/form-data"> <!-- Added enctype for file upload -->
+        {% csrf_token %}
+        
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <label for="my_location_link">Location Link:</label>
+        <input type="url" id="my_location_link" name="my_location_link"><br>
+
+        <label for="profile_picture">Profile Picture:</label>
+        <input type="file" id="profile_picture" name="profilepick"><br> <!-- Updated to match view 'profilepick' -->
+
+        <label for="whatsapp_number">WhatsApp Number:</label>
+        <input type="text" id="whatsapp_number" name="whatsapp num"><br> <!-- Updated to match view 'whatsapp num' -->
+
+        <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+</body>
+</html>
