@@ -29,7 +29,7 @@ class UserRegistrationView(View):
         user.set_password(password)
         user.save()
         login(request,user)
-        return redirect('home')
+        return redirect('index')
     
 class UserLoginView(View):
     def get(self,request):
@@ -42,16 +42,16 @@ class UserLoginView(View):
         print(user,"hello user")
         if user is not None:
             login(request,user)
-            return redirect ('home')
+            return redirect ('index')
         else:
             messages.error(request, 'Invalid credentials')
             return render(request, 'login.html')
         
 class HomeView(View):
     def get(self, request):
-        return render(request, 'home.html') 
+        return render(request, 'index.html') 
     
 class UserLogoutView(View):
     def get(self,request):
         logout(request)
-        return redirect('home')
+        return redirect('index')
