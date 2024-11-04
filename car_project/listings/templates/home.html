@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Listings</title>
+    <style>
+        /* Flex container for the main layout */
+        .container {
+            display: flex;
+            align-items: flex-start; /* Align items at the start of the container */
+            gap: 20px; /* Gap between columns */
+        }
+        /* Each column style */
+        .column {
+            flex: 1; /* Allow columns to grow equally */
+            border: 1px solid #ccc; /* Optional: add border to columns */
+            padding: 10px; /* Padding inside columns */
+            background-color: #f9f9f9; /* Optional: background color */
+        }
+        /* Style for each car listing */
+        .car-listing {
+            border-bottom: 1px solid #ddd; /* Separator for listings */
+            padding: 10px 0; /* Padding for each listing */
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Main container for inline display -->
+    <div class="container" style="display: flex; align-items: flex-start; gap: 20px;">
+
+        <!-- Authentication Section -->
+        <div class="column" style="flex: 1;" >
+            {% if request.user.is_authenticated %}
+                <p>Hello, {{ request.user.username }}!</p>
+                <form method="get" action="{% url 'logout' %}">
+                    <button type="submit">Log Out</button>
+                </form>
+                <br>
+                <a href="{% url 'my_cars_for_sale' %}">MY CArs for sales list page</a><br><br>
+                <a href="{% url 'my_cars_for_rent' %}">My car for rent list page</a><br><br>
+                <a href="{% url 'car_for_sale_detail' %}">Car for Sale details</a><br><br>
+                <a href="{% url 'car_for_rent_detail' %}">Car for Rent details</a><br><br>
+                <a href="{% url 'add_car_for_sale' %}">Add Car for Sale</a><br><br>
+                <a href="{% url 'car_for_rent' %}">Add car for rent</a><br><br>
+                
+                    {% if my_rent_cars %}
+                        <h1>My rent car details</h1>
+                        {% for car in my_rent_cars %}
+                            <p>{{ car.name }}</p>
+                            <p>{{ car.brand.name }}</p>
+                            <p>{{ car.oil_type.type }}</p>
+                            <p>{{ car.description }}</p>
+                            <p>{{ car.price_per_day }}</p>
+                            <p>{{ car.mileage }}</p>
+                            <img src="{{ car.rent_car_image.url }}" style="width:150px;" alt="{{ car.name }} Image">
+
+                           
+                        {% endfor %}
+                    {% else %}
+                    <p>You currently have no cars listed for rent.</p>
+                    <a href="{% url 'car_for_rent' %}">Add car for rent</a>
+                    {% endif %}
+
+            {% else %}
+                <p>Hello! Please sign up or log in to add your own car for sale.</p>
+                <p><a href="{% url 'signup' %}">Sign Up</a></p>
+                <br>
+                <br>
+                <p><a href="{% url 'login' %}">Log In</a></p>
+                <h1>Rent car available on this platform log in to contine</h1>
+                {% for car in all_rent_cars %}
+                <p>{{car.name}}</p>
+                <p>{{car.brand.name}}</p>
+                <p>{{car.oil_type.type}}</p>
+                <p>{{car.description}}</p>
+                <p>{{car.price_per_day}}</p>
+                <p>{{car.mileage}}</p>
+               
+                <img src="{{  car.rent_car_image.url}}" style="width:150px;" alt="{{ car.name }} Image">
+                
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Cars for Sale Section -->
+        <div class="column" style="flex: 3;">
+            <h1>Cars for Sale</h1>
+            {% if list_all_car %}
+                <ul>
+                    {% for car in list_all_car %}
+                        <li style="border-bottom: 1px solid #ddd; padding: 10px 0;">
+                            <h2>{{ car.name }} - {{ car.brand.name }}</h2>
+                            <p>Model Year: {{ car.modelYear }}</p>
+                            <p>Kilometers Driven: {{ car.km_driven }}</p>
+                            <p>Oil Type: {{ car.oil_type.type }}</p>
+                            <p>Price: ₹{{ car.price }}</p>
+                            <p>Mileage: {{ car.mileage }} km/l</p>
+                            <p>Accidental Background: {{ car.accidental_background|yesno:"Yes,No" }}</p>
+                            <p>Description: {{ car.description }}</p>
+                            <p>Registration Number: {{ car.registration_number }}</p>
+                            <p>Insurance End Date: {{ car.insurance_end_date }}</p>
+                            <p>Ownership Type: {{ car.get_ownership_type_display }}</p>
+
+                            {% if car.front_image %}
+                                <p>Front Image:</p>
+                                <img src="{{ car.front_image.url }}" alt="{{ car.name }} Front Image" style="width:150px;">
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No cars available for sale at the moment.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

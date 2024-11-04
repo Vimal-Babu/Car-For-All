@@ -1,0 +1,85 @@
+<!-- edit_car_for_sale.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Car for Sale</title>
+</head>
+<body>
+    <h1>Edit Car for Sale</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label for="name">Car Name:</label>
+        <input type="text" name="name" id="name" value="{{ car.name }}" required><br>
+
+        <label for="modelYear">Model Year:</label>
+        <input type="number" name="modelYear" id="modelYear" value="{{ car.modelYear }}" required><br>
+
+        <label for="km_driven">KM Driven:</label>
+        <input type="number" name="km_driven" id="km_driven" value="{{ car.km_driven }}" required><br>
+
+        <label for="brand">Brand:</label>
+        <select name="brand" id="brand" required>
+            {% for brand in brands %}
+                <option value="{{ brand.id }}" {% if car.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="oil_type">Oil Type:</label>
+        <select name="oil_type" id="oil_type" required>
+            {% for oil in oil_types %}
+                <option value="{{ oil.id }}" {% if car.oil_type.id == oil.id %}selected{% endif %}>{{ oil.type }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="accidental_background">Accidental Background:</label>
+        <input type="checkbox" name="accidental_background" id="accidental_background" {% if car.accidental_background %}checked{% endif %}><br>
+
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" required>{{ car.description }}</textarea><br>
+
+        <label for="price">Price:</label>
+        <input type="number" name="price" id="price" step="0.01" value="{{ car.price }}" required><br>
+
+        <label for="mileage">Mileage:</label>
+        <input type="number" name="mileage" id="mileage" value="{{ car.mileage }}" required><br>
+
+        <label for="registration_number">Registration Number:</label>
+        <input type="text" name="registration_number" id="registration_number" value="{{ car.registration_number }}" required><br>
+
+        <label for="insurance_end_date">Insurance End Date:</label>
+        <input type="date" name="insurance_end_date" id="insurance_end_date" value="{{ car.insurance_end_date }}" required><br>
+
+        <label for="ownership_type">Ownership Type:</label>
+        <select name="ownership_type" id="ownership_type" required>
+            <option value="first" {% if car.ownership_type == 'first' %}selected{% endif %}>First</option>
+            <option value="second" {% if car.ownership_type == 'second' %}selected{% endif %}>Second</option>
+            <option value="third" {% if car.ownership_type == 'third' %}selected{% endif %}>Third</option>
+        </select><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+    <a href="{% url 'my_cars_for_sale' %}">Cancel</a> <!-- Link to go back to the list of cars for sale -->
+</body>
+</html>
+
+
+
+
+<!-- edit_car_for_sale.html 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Car for Sale</title>
+</head>
+<body>
+    <h1>Edit Car for Sale</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html> -->

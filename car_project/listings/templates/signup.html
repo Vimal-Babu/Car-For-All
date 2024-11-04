@@ -12,28 +12,29 @@
         {% csrf_token %}
         
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+        <input type="text" id="username" name="username" required><br><br>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
+        <input type="email" id="email" name="email" required><br><br>
 
         <label for="phone">Phone:</label>
-        <input type="text" id="phone" name="phone" required><br>
+        <input type="text" id="phone" name="phone" required><br><br>
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <input type="password" id="password" name="password" required><br><br>
 
         <label for="my_location_link">Location Link:</label>
-        <input type="url" id="my_location_link" name="my_location_link"><br>
+        <input type="url" id="my_location_link" name="my_location_link"><br><br>
 
         <label for="profile_picture">Profile Picture:</label>
-        <input type="file" id="profile_picture" name="profilepick"><br> <!-- Updated to match view 'profilepick' -->
+        <input type="file" id="profile_picture" name="profilepick"><br><br> <!-- Updated to match view 'profilepick' -->
 
         <label for="whatsapp_number">WhatsApp Number:</label>
-        <input type="text" id="whatsapp_number" name="whatsapp num"><br> <!-- Updated to match view 'whatsapp num' -->
+        <input type="text" id="whatsapp_number" name="whatsapp num"><br><br> <!-- Updated to match view 'whatsapp num' -->
 
-        <button type="submit">Sign Up</button>
+        <button type="submit">Sign Up</button><br>
     </form>
+    <br>
     <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
 </body>
 </html>

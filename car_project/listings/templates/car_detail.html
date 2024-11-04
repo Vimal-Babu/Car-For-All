@@ -1,0 +1,130 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Details</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .car-column {
+            width: 48%; /* Adjust width as needed */
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Car Details</h1>
+    <div class="container">
+        <a href="{% url 'home' %}">go to home</a>
+        <div class="car-column">
+            <h2>Car for Sale</h2>
+            {% if car_for_sale %}
+                <ul>
+                    {% for car in car_for_sale %}
+                        <div class="car-listing">
+                            <h2>{{ car.name }} - {{ car.brand.name }}</h2>
+                            <p>Model Year: {{ car.modelYear }}</p>
+                            <p>Kilometers Driven: {{ car.km_driven }}</p>
+                            <p>Oil Type: {{ car.oil_type.type }}</p>
+                            <p>Price: ₹{{ car.price }}</p>
+                            <p>Mileage: {{ car.mileage }} km/l</p>
+                            <p>Accidental Background: {{ car.accidental_background|yesno:"Yes,No" }}</p>
+                            <p>Description: {{ car.description }}</p>
+                            <p>Registration Number: {{ car.registration_number }}</p>
+                            <p>Insurance End Date: {{ car.insurance_end_date }}</p>
+                            <p>Ownership Type: {{ car.get_ownership_type_display }}</p>
+                            <p>Owner: {{ car.user.username }}</p> <!-- Display owner's username -->
+                            <p>Email: {{ car.user.email }}</p> <!-- Display owner's email -->
+                            <p>Phone: {{ car.user.phone }}</p> <!-- Display owner's phone -->
+                            <p>Front Image:</p>
+                            <img src="{{ car.front_image.url }}" alt="{{ car.name }} Front Image" style="width:150px;">
+                            <br><br>
+                            {% if car.user.my_location_link %}
+
+                            <a href="{{ car.user.my_location_link }}" target="_blank">Find Owner Location</a><br><br>
+                            {% else %}
+                                <p>Location not available</p>
+                            {% endif %}
+                            {% if car.user.whatsapp_number %}
+                                <a href="https://wa.me/{{ car.user.whatsapp_number }}" target="_blank">Chat with WhatsApp</a><br><br>
+                            {% else %}
+                                <p>WhatsApp not available</p>
+                            {% endif %}
+                            {% if car.registration_number %}
+                                <a href="https://parivahan.gov.in/parivahan/en/content/vehicle-related-services" target="_blank">Verify with mParivahan</a>
+                                <!-- <a href="https://mparivahan.gov.in/..." target="_blank">Verify with mParivahan</a> -->
+                            {% else %}
+                                <p>Registration number not available</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No cars available for sale at the moment.</p>
+            {% endif %}
+        </div>
+        
+        <div class="car-column">
+            <h2>Car for Rent </h2>
+            {% if car_for_rent %}
+                <ul>
+                    {% for car in car_for_rent %}
+                        <li class="car-listing">
+                            <h2>{{ car.name }} - {{ car.brand.name }}</h2>
+                            <p>Oil Type: {{ car.oil_type.type }}</p>
+                            <p>Description: {{ car.description }}</p>
+                            <p>Price per Day: ₹{{ car.price_per_day }}</p>
+                            <p>Mileage: {{ car.mileage }} km/l</p>
+                            <p>Owner: {{ car.user.username }}</p> <!-- Display owner's username -->
+                            <p>Email: {{ car.user.email }}</p> <!-- Display owner's email -->
+                            <p>Phone: {{ car.user.phone }}</p> <!-- Display owner's phone -->
+                            <img src="{{ car.rent_car_image.url }}" alt="{{ car.name }} Image" style="width:150px;"><br>
+                            {% if car.user.my_location_link %}
+                            <a href="{{ car.user.my_location_link }}" target="_blank">Find Owner Location</a><br><br>
+                            {% else %}
+                                <p>Location not available</p>
+                            {% endif %}
+                            {% if car.user.whatsapp_number %}
+                                <a href="https://wa.me/{{ car.user.whatsapp_number }}" target="_blank">Chat with WhatsApp</a><br><br>
+                            {% else %}
+                                <p>WhatsApp not available</p>
+                            {% endif %}
+                            <!-- {% if car.registration_number %}
+                                <a href="https://parivahan.gov.in/parivahan/en/content/vehicle-related-services" target="_blank">Verify with mParivahan</a>
+                                 <a href="https://mparivahan.gov.in/..." target="_blank">Verify with mParivahan</a> 
+                            {% else %}
+                                <p>Registration number not available</p>
+                            {% endif %} -->
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+            <p>No cars available for rent at the moment.</p>
+            {% endif %}
+            <!-- <div>
+                <a href="https://maps.google.com/?q={{ car.user.my_location_link }}" target="_blank">Find Owner Location</a>
+                <a href="https://wa.me/{{ car_for_rent.owner.whatsapp_number }}" target="_blank">Chat with WhatsApp</a>
+                <a href="https://mparivahan.gov.in/" target="_blank">Verify with mParivahan</a>
+            </div> -->
+        </div>
+    </div>
+
+    
+    <ul>
+        <!-- {% for car in car_for_sale %}
+            <li>{{ car.name }} - ₹{{ car.price }}</li>
+            <img src="{{ car.front_image.url }}" alt="{{ car.name }} Front Image" style="width:150px;">
+        {% endfor %}
+        {% for car in car_for_rent %}
+            <li>{{ car.name }} - ₹{{ car.price }}</li>
+            <img src="{{ car.rent_car_image.url }}" alt="{{ car.name }} Image" style="width:150px;"><br>
+        {% endfor %} -->
+    
+
+    </ul>
+</body>
+</html> -->

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car for Rent Details</title>
+</head>
+<body>
+    <h1>Car for Rent Details</h1>
+    <div>
+        <a href="{% url 'home' %}">Go to Home</a>
+        {% if car_for_rent %}
+            {% for car in car_for_rent %}
+                <div>
+                    <h2>{{ car.name }} - {{ car.brand.name }}</h2>
+                    <p>Oil Type: {{ car.oil_type.type }}</p>
+                    <p>Description: {{ car.description }}</p>
+                    <p>Price per Day: ₹{{ car.price_per_day }}</p>
+                    <p>Mileage: {{ car.mileage }} km/l</p>
+                    <p>Owner: {{ car.user.username }}</p>
+                    <img src="{{ car.rent_car_image.url }}" alt="{{ car.name }} Image" style="width:150px;">
+                    {% if car.user.my_location_link %}
+                        <a href="{{ car.user.my_location_link }}" target="_blank">Find Owner Location</a><br>
+                    {% endif %}
+                    {% if car.user.whatsapp_number %}
+                        <a href="https://wa.me/{{ car.user.whatsapp_number }}" target="_blank">Chat with WhatsApp</a><br>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No cars available for rent at the moment.</p>
+        {% endif %}
+        <h2>Other Cars You Might Like</h2>
+    </div>
+</body>
+</html>

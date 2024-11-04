@@ -1,0 +1,110 @@
+
+
+<a href="{% url 'home' %}">go home </a><br>
+<br><br>
+<h1>My Cars for Rent</h1><br>
+
+<!-- Filter Form -->
+<nav>
+    <form method="get" action="">
+        <select name="brand">
+            
+            <option value="">Select Brand</option>
+            {% for brand in brands %}
+                <option value="{{ brand.id }}" {% if brand.id|stringformat:"d" == selected_brand %}selected{% endif %}>{{ brand.name }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="year">
+            <option value="">Select Year</option>
+            <option value="below_3" {% if selected_year == 'below_3' %}selected{% endif %}>Below 3 Years</option>
+            <option value="3_to_5" {% if selected_year == '3_to_5' %}selected{% endif %}>3-5 Years</option>
+            <option value="5_to_10" {% if selected_year == '5_to_10' %}selected{% endif %}>5-10 Years</option>
+            <option value="above_10" {% if selected_year == 'above_10' %}selected{% endif %}>Above 10 Years</option>
+        </select>
+
+        <select name="price">
+            <option value="">Select Price Range</option>
+            <option value="below_50" {% if selected_price == 'below_50' %}selected{% endif %}>Below 50</option>
+            <option value="50_to_100" {% if selected_price == '50_to_100' %}selected{% endif %}>50-100</option>
+            <option value="100_to_200" {% if selected_price == '100_to_200' %}selected{% endif %}>100-200</option>
+            <option value="200_to_500" {% if selected_price == '200_to_500' %}selected{% endif %}>200-500</option>
+            <option value="above_500" {% if selected_price == 'above_500' %}selected{% endif %}>Above 500</option>
+        </select>
+
+        <input type="text" name="search" placeholder="Search by Car Name" value="{{ search_query }}">
+        <button type="submit">Filter</button>
+    </form>
+</nav>
+
+<table>
+    <thead>
+        <tr>
+            <th>Car Name</th>
+            <th>Registration Number</th>
+            <th>Price per Day</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for car in cars_for_rent %}
+        <tr>
+            <td>{{ car.name }}</td>
+            <td>{{ car.registration_number }}</td>
+            <td>{{ car.price_per_day }}</td>
+            <td>
+                <a href="{% url 'edit_car_for_rent' car.id %}">Edit Car</a>
+                <form action="{% url 'delete_car_for_rent' car.id %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete Car</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No cars for rent.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+<!-- <h1>My Cars for Rent</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Car Name</th>
+            <th>Registration Number</th>
+            <th>Price per Day</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for car in cars_for_rent %}
+        <tr>
+            <td>{{ car.name }}</td>
+            <td>{{ car.registration_number }}</td>
+            <td>{{ car.price_per_day }}</td>
+            <td>
+                <a href="{% url 'edit_car_for_rent' car.id %}">Edit Car</a>
+                <form action="{% url 'delete_car_for_rent' car.id %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete Car</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No cars for rent.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> -->
