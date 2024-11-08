@@ -1,39 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Car for Sale Details</title>
-</head>
-<body>
-    <h1>Car for Sale Details</h1>
-    <div>
-        <a href="{% url 'home' %}">Go to Home</a>
-        {% if car_for_sale %}
-            {% for car in car_for_sale %}
-                <div>
-                    <h2>{{ car.name }} - {{ car.brand.name }}</h2>
-                    <p>Model Year: {{ car.modelYear }}</p>
-                    <p>Kilometers Driven: {{ car.km_driven }}</p>
-                    <p>Oil Type: {{ car.oil_type.type }}</p>
-                    <p>Price: ₹{{ car.price }}</p>
-                    <p>Mileage: {{ car.mileage }} km/l</p>
-                    <p>Owner: {{ car.user.username }}</p>
-                    <img src="{{ car.front_image.url }}" alt="{{ car.name }} Front Image" style="width:150px;">
-                    {% if car.user.my_location_link %}
-                        <a href="{{ car.user.my_location_link }}" target="_blank">Find Owner Location</a><br>
-                    {% endif %}
-                    {% if car.user.whatsapp_number %}
-                        <a href="https://wa.me/{{ car.user.whatsapp_number }}" target="_blank">Chat with WhatsApp</a><br>
-                    {% endif %}
-                    {% if car.registration_number %}
-                        <a href="https://parivahan.gov.in/parivahan/en/content/vehicle-related-services" target="_blank">Verify with mParivahan</a><br>
-                    {% endif %}
+{% extends 'base.html' %}
+
+{% block title %}Car for Sale Details - CarSpace{% endblock %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h1><strong>CAR FOR SALE DETAILS</strong></h1>
+    
+    
+    {% if car_for_sale %}
+        {% for car in car_for_sale %}
+            <div class="card mb-4 text-center">
+                <div class="card-header">
+                    <h2 class="card-title"><strong>{{ car.name }} - {{ car.brand.name }}</strong></h2>
                 </div>
-            {% endfor %}
-        {% else %}
-            <p>No cars available for sale at the moment.</p>
-        {% endif %}
-        <h2>Other Cars You Might Like</h2>
-    </div>
-</body>
-</html>
+                <div class="card-body">
+                    <p><strong>Model Year:</strong> {{ car.modelYear }}</p>
+                    <p><strong>Kilometers Driven:</strong> {{ car.km_driven }}</p>
+                    <p><strong>Oil Type:</strong> {{ car.oil_type.type }}</p>
+                    <p><strong>Price:</strong> ₹{{ car.price }}</p>
+                    <p><strong>Mileage:</strong> {{ car.mileage }} km/l</p>
+                    <p><strong>Owner:</strong> {{ car.user.username }}</p>
+                    
+                    {% if car.front_image %}
+                        <img src="{{ car.front_image.url }}" alt="{{ car.name }} Front Image" class="img-fluid" style="width:150px;">
+                    {% endif %}
+
+                    <div class="mt-3">
+                        {% if car.user.my_location_link %}
+                            <a href="{{ car.user.my_location_link }}" class="btn btn-outline-info btn-sm" target="_blank">Find Owner Location</a>
+                        {% endif %}
+                        {% if car.user.whatsapp_number %}
+                            <a href="https://wa.me/{{ car.user.whatsapp_number }}" class="btn btn-outline-success btn-sm" target="_blank">Chat with WhatsApp</a>
+                        {% endif %}
+                        {% if car.registration_number %}
+                            <a href="https://parivahan.gov.in/parivahan/en/content/vehicle-related-services" class="btn btn-outline-primary btn-sm" target="_blank">Verify with mParivahan</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="alert alert-warning">No cars available for sale at the moment.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+
+
+

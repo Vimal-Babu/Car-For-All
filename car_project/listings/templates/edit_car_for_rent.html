@@ -1,4 +1,73 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block title %}Edit Car for Rent - CarSpace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Edit Car for Rent</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="name">Car Name:</label>
+            <input type="text" name="name" id="name" value="{{ car.name }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="brand">Brand:</label>
+            <select name="brand" id="brand" class="form-control" required>
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}" {% if car.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="oil_type">Oil Type:</label>
+            <select name="oil_type" id="oil_type" class="form-control" required>
+                {% for oil in oil_types %}
+                    <option value="{{ oil.id }}" {% if car.oil_type.id == oil.id %}selected{% endif %}>{{ oil.type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" class="form-control" rows="4" required>{{ car.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="price_per_day">Price per Day:</label>
+            <input type="number" name="price_per_day" id="price_per_day" step="0.01" value="{{ car.price_per_day }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="mileage">Mileage:</label>
+            <input type="number" name="mileage" id="mileage" value="{{ car.mileage }}" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="rent_car_image">Upload New Image (if any):</label>
+            <input type="file" name="rent_car_image" id="rent_car_image" class="form-control-file">
+        </div>
+        
+        {% if car.rent_car_image %}
+            <img src="{{ car.rent_car_image.url }}" alt="Current Image" class="img-thumbnail" style="width: 150px;">
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+        <a href="{% url 'my_cars_for_rent' %}" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,6 +112,6 @@
 
         <button type="submit">Save Changes</button>
     </form>
-    <a href="{% url 'my_cars_for_rent' %}">Cancel</a> <!-- Link to go back to the list of cars for rent -->
+    <a href="{% url 'my_cars_for_rent' %}">Cancel</a> 
 </body>
-</html>
+</html> -->

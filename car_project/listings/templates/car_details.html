@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}{{ car.name }} Details - CarSpace{% endblock %}
+
+{% block content %}
+<h4 class="text-center border-bottom"><strong>{{ car.name }} Details</strong></h4>
+
+
+<div class="card mb-4 text-center">
+    <img src="{{ car.front_image.url }}" class="card-img-top" alt="{{ car.name }} Image">
+    <div class="card-body bg-secondary text-white">
+        <h4 class="card-title border-bottom">{{ car.name }}</h4>
+        <p class="card-text"><strong>Brand:</strong> {{ car.brand.name }}</p>
+        <p class="card-text"><strong>Model Year:</strong> {{ car.modelYear }}</p>
+        <p class="card-text"><strong>KM Driven:</strong> {{ car.km_driven }} km</p>
+        <p class="card-text"><strong>Oil Type:</strong> {{ car.oil_type.type }}</p>
+        <p class="card-text"><strong>Description:</strong> {{ car.description }}</p>
+        <p class="card-text"><strong>Price:</strong> ₹{{ car.price }}</p>
+        <p class="card-text"><strong>Mileage:</strong> {{ car.mileage }} km/l</p>
+        <p class="card-text"><strong>Ownership:</strong> {{ car.get_ownership_type_display }}</p>
+        <p class="card-text"><strong>Insurance End Date:</strong> {{ car.insurance_end_date }}</p>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+

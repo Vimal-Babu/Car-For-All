@@ -1,4 +1,61 @@
-<!-- my_app/templates/my_app/signup.html -->
+{% extends 'base.html' %}
+{% block title %}Sign Up - CarSpace{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center"><strong>Sign Up</strong></h1>
+    <form method="POST" action="{% url 'signup' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="my_location_link">Location Link:</label>
+            <input type="url" class="form-control" id="my_location_link" name="my_location_link">
+        </div>
+
+        <div class="form-group">
+            <label for="profile_picture">Profile Picture:</label>
+            <input type="file" class="form-control-file" id="profile_picture" name="profilepick">
+        </div>
+
+        <div class="form-group">
+            <label for="whatsapp_number">WhatsApp Number:</label>
+            <input type="text" class="form-control" id="whatsapp_number" name="whatsapp_num">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+    </form>
+    <br>
+    <p class="text-center">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+<!-- my_app/templates/my_app/signup.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +65,7 @@
 </head>
 <body>
     <h1>Sign Up</h1>
-    <form method="POST" action="{% url 'signup' %}" enctype="multipart/form-data"> <!-- Added enctype for file upload -->
+    <form method="POST" action="{% url 'signup' %}" enctype="multipart/form-data"> 
         {% csrf_token %}
         
         <label for="username">Username:</label>
@@ -27,14 +84,12 @@
         <input type="url" id="my_location_link" name="my_location_link"><br><br>
 
         <label for="profile_picture">Profile Picture:</label>
-        <input type="file" id="profile_picture" name="profilepick"><br><br> <!-- Updated to match view 'profilepick' -->
-
+        <input type="file" id="profile_picture" name="profilepick"><br><br> 
         <label for="whatsapp_number">WhatsApp Number:</label>
-        <input type="text" id="whatsapp_number" name="whatsapp num"><br><br> <!-- Updated to match view 'whatsapp num' -->
-
+        <input type="text" id="whatsapp_number" name="whatsapp num"><br><br> 
         <button type="submit">Sign Up</button><br>
     </form>
     <br>
     <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
 </body>
-</html>
+</html> -->

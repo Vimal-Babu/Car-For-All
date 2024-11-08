@@ -1,5 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Log In - CarSpace{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center"><strong>Log In</strong></h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username"></label>
+            <input type="text" class="form-control" placeholder="username" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password"></label>
+            <input type="password" class="form-control" placeholder="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+    </form>
+    <br>
+    <p class="text-center">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
 <!-- my_app/templates/my_app/login.html -->
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,4 +53,4 @@
     </form>
     <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
 </body>
-</html>
+</html> -->

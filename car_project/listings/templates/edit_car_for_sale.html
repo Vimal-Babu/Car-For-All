@@ -1,4 +1,104 @@
-<!-- edit_car_for_sale.html -->
+{% extends 'base.html' %}
+
+{% block title %}Edit Car for Sale - CarSpace{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Edit Car for Sale</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            <label for="name" class="form-label">Car Name:</label>
+            <input type="text" name="name" id="name" class="form-control" value="{{ car.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="modelYear" class="form-label">Model Year:</label>
+            <input type="number" name="modelYear" id="modelYear" class="form-control" value="{{ car.modelYear }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="km_driven" class="form-label">KM Driven:</label>
+            <input type="number" name="km_driven" id="km_driven" class="form-control" value="{{ car.km_driven }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="brand" class="form-label">Brand:</label>
+            <select name="brand" id="brand" class="form-select" required>
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}" {% if car.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="oil_type" class="form-label">Oil Type:</label>
+            <select name="oil_type" id="oil_type" class="form-select" required>
+                {% for oil in oil_types %}
+                    <option value="{{ oil.id }}" {% if car.oil_type.id == oil.id %}selected{% endif %}>{{ oil.type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="accidental_background" id="accidental_background" class="form-check-input" {% if car.accidental_background %}checked{% endif %}>
+            <label for="accidental_background" class="form-check-label">Accidental Background</label>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea name="description" id="description" class="form-control" required>{{ car.description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="number" name="price" id="price" class="form-control" step="0.01" value="{{ car.price }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="mileage" class="form-label">Mileage:</label>
+            <input type="number" name="mileage" id="mileage" class="form-control" value="{{ car.mileage }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="registration_number" class="form-label">Registration Number:</label>
+            <input type="text" name="registration_number" id="registration_number" class="form-control" value="{{ car.registration_number }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="insurance_end_date" class="form-label">Insurance End Date:</label>
+            <input type="date" name="insurance_end_date" id="insurance_end_date" class="form-control" value="{{ car.insurance_end_date }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="ownership_type" class="form-label">Ownership Type:</label>
+            <select name="ownership_type" id="ownership_type" class="form-select" required>
+                <option value="first" {% if car.ownership_type == 'first' %}selected{% endif %}>First</option>
+                <option value="second" {% if car.ownership_type == 'second' %}selected{% endif %}>Second</option>
+                <option value="third" {% if car.ownership_type == 'third' %}selected{% endif %}>Third</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    
+    <a href="{% url 'my_cars_for_sale' %}" class="btn btn-secondary mt-3">Cancel</a> 
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,26 +160,11 @@
 
         <button type="submit">Save Changes</button>
     </form>
-    <a href="{% url 'my_cars_for_sale' %}">Cancel</a> <!-- Link to go back to the list of cars for sale -->
+    <a href="{% url 'my_cars_for_sale' %}">Cancel</a> 
 </body>
 </html>
 
 
 
 
-<!-- edit_car_for_sale.html 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Car for Sale</title>
-</head>
-<body>
-    <h1>Edit Car for Sale</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Changes</button>
-    </form>
-</body>
-</html> -->
+ -->

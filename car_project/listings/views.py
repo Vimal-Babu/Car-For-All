@@ -6,6 +6,8 @@ from django.shortcuts import redirect,get_object_or_404
 from django.views import View
 from .models import CustomUser,OilType,Brand,CarForSale,CarForRent
 from django.contrib import messages
+from django.utils import timezone
+from datetime import timedelta
 
 class UserRegistrationView(View):
     def get(self,request):
@@ -53,11 +55,13 @@ class HomeView(View):
         list_my_cars = CarForSale.objects.filter(user=request.user) if request.user.is_authenticated else None
         all_rent_cars = CarForRent.objects.all()
         my_rent_cars = CarForRent.objects.filter(user =request.user) if request.user.is_authenticated else None
+        # all_cars = list(list_all_car) + list(all_rent_cars)
         context = {
         'list_all_car': list_all_car,
         'list_my_cars': list_my_cars,
         'all_rent_cars': all_rent_cars,
-        'my_rent_cars': my_rent_cars
+        'my_rent_cars': my_rent_cars,
+        
         }
         return render(request,'home.html',context)
     
@@ -78,8 +82,6 @@ class CarForSaleView(View):
         return render(request,'car_for_sale_form.html',{'brands':brands,'oil_types':oil_type})
     
     def post(self,request):
-        # extrancting field and assign to values and save to the data base if all correct and ok sent to home page and show a mesage like 
-        # sucss fulley added the car if any issues on the field showing error message
         name = request.POST.get('name')
         model_year = request.POST.get('model_year')
         km_driven = request.POST.get('km_driven')
@@ -115,6 +117,7 @@ class CarForSaleView(View):
         car_for_sale.save()
         messages.success(request, 'Car for sale added successfully!')
         return redirect('home')
+    
 class CarForRentView(View):
     def get(self,request):
         brands = Brand.objects.all()
@@ -168,6 +171,7 @@ class CarForSaleDetailView(View):
             'car_for_sale': car_for_sale
         }
         return render(request, 'car_for_sale_detail.html', context)
+    
 
 class CarForRentDetailView(View):
     def get(self, request):
@@ -177,54 +181,61 @@ class CarForRentDetailView(View):
         }
         return render(request, 'car_for_rent_detail.html', context)
 
+  
 
-# class MyCarsForSaleView(View):
-#     def get(self, request):
-#         cars_for_sale = CarForSale.objects.filter(user=request.user)
-#         return render(request, 'my_cars_for_sale.html', {'cars_for_sale': cars_for_sale})
-    
 class MyCarsForSaleView(View):
     def get(self, request):
         cars_for_sale = CarForSale.objects.filter(user=request.user)
+        
+        current_year = timezone.now().year
+        
 
         # Get filter parameters from the request
         brand_filter = request.GET.get('brand')
+        print(brand_filter,"brand flter")
         year_filter = request.GET.get('year')
         price_filter = request.GET.get('price')
         search_query = request.GET.get('search')
 
-        # Apply filters
+        print("Brand Filter:", brand_filter)
+        print("Year Filter:", year_filter)
+        print("Price Filter:", price_filter)
+        print("Search Query:", search_query)
+
+
+        # Apply Brand Filter
         if brand_filter:
             cars_for_sale = cars_for_sale.filter(brand_id=brand_filter)
+        print(cars_for_sale,"cars for sale inside if")
+        # Apply Year Filter based on the current year
+        if year_filter == 'below_3':
+            cars_for_sale = cars_for_sale.filter(modelYear__gte=current_year - 3)
+        elif year_filter == '3_to_5':
+            cars_for_sale = cars_for_sale.filter(modelYear__gte=current_year - 5, modelYear__lt=current_year - 3)
+        elif year_filter == '5_to_10':
+            cars_for_sale = cars_for_sale.filter(modelYear__gte=current_year - 10, modelYear__lt=current_year - 5)
+        elif year_filter == 'above_10':
+            cars_for_sale = cars_for_sale.filter(modelYear__lt=current_year - 10)
 
-        if year_filter:
-            # Filter based on model year (assuming modelYear is a field in your model)
-            if year_filter == 'below_3':
-                cars_for_sale = cars_for_sale.filter(modelYear__gte=2022)
-            elif year_filter == '3_to_5':
-                cars_for_sale = cars_for_sale.filter(modelYear__gte=2018, modelYear__lt=2022)
-            elif year_filter == '5_to_10':
-                cars_for_sale = cars_for_sale.filter(modelYear__gte=2013, modelYear__lt=2018)
-            elif year_filter == 'above_10':
-                cars_for_sale = cars_for_sale.filter(modelYear__lt=2013)
+        # Apply Price Filter
+        if price_filter == 'below_50k':
+            cars_for_sale = cars_for_sale.filter(price__lt=50000)
+        elif price_filter == '1L_to_3L':
+            cars_for_sale = cars_for_sale.filter(price__gte=50000, price__lt=300000)
+        elif price_filter == '3L_to_5L':
+            cars_for_sale = cars_for_sale.filter(price__gte=300000, price__lt=500000)
+        elif price_filter == '5L_to_10L':
+            cars_for_sale = cars_for_sale.filter(price__gte=500000, price__lt=1000000)
+        elif price_filter == 'above_10L':
+            cars_for_sale = cars_for_sale.filter(price__gte=1000000)
 
-        if price_filter:
-            if price_filter == 'below_50k':
-                cars_for_sale = cars_for_sale.filter(price__lt=50000)
-            elif price_filter == '1L_to_3L':
-                cars_for_sale = cars_for_sale.filter(price__gte=50000, price__lt=300000)
-            elif price_filter == '3L_to_5L':
-                cars_for_sale = cars_for_sale.filter(price__gte=300000, price__lt=500000)
-            elif price_filter == '5L_to_10L':
-                cars_for_sale = cars_for_sale.filter(price__gte=500000, price__lt=1000000)
-            elif price_filter == 'above_10L':
-                cars_for_sale = cars_for_sale.filter(price__gte=1000000)
-
+        # Apply Search Filter
         if search_query:
             cars_for_sale = cars_for_sale.filter(name__icontains=search_query)
 
-        # Fetch all brands for the filter dropdown
-        brands = Brand.objects.all()
+        # Debugging: Check filtered results
+        print(f"Filtered cars: {cars_for_sale}")
+        brands = Brand.objects.all()  # Fetch all brands for the filter dropdown
 
         return render(request, 'my_cars_for_sale.html', {
             'cars_for_sale': cars_for_sale,
@@ -234,33 +245,36 @@ class MyCarsForSaleView(View):
             'selected_price': price_filter,
             'search_query': search_query,
         })
-# class MyCarsForRentView(View):
-#     def get(self, request):
-#         cars_for_rent = CarForRent.objects.filter(user=request.user)
-#         return render(request, 'my_cars_for_rent.html', {'cars_for_rent': cars_for_rent})
+
+
+
+
 
 
 class MyCarsForRentView(View):
     def get(self, request):
+        # Get user's cars for rent
         cars_for_rent = CarForRent.objects.filter(user=request.user)
-        print(cars_for_rent,"car for rentttttttttttttt")
 
         # Get filter parameters from the request
         brand_filter = request.GET.get('brand')
-        print(brand_filter,"brand filtereeeeeeeee")
-        year_filter = request.GET.get('year')
-        print(year_filter)
+        oil_type_filter = request.GET.get('oil_type')
         price_filter = request.GET.get('price')
-        print(price_filter)
+        mileage_filter = request.GET.get('mileage')
         search_query = request.GET.get('search')
-        print(search_query,"serch keywordddd")
+        year_filter = request.GET.get('year')
+        print("Brand Filter:", brand_filter)
+        print("Year Filter:", year_filter)
+        print("Filtered Cars Queryset:", cars_for_rent)
+        print("oil type ",oil_type_filter)
 
-        # Apply filters
+
+        # Apply filters sequentially
         if brand_filter:
             cars_for_rent = cars_for_rent.filter(brand_id=brand_filter)
-
-        if year_filter:
-            # Assuming modelYear is a field in your model
+        if oil_type_filter:
+            cars_for_rent = cars_for_rent.filter(oil_type_id=oil_type_filter)
+        if year_filter and year_filter != 'None':  # Check explicitly for 'None'
             if year_filter == 'below_3':
                 cars_for_rent = cars_for_rent.filter(modelYear__gte=2022)
             elif year_filter == '3_to_5':
@@ -281,21 +295,31 @@ class MyCarsForRentView(View):
                 cars_for_rent = cars_for_rent.filter(price_per_day__gte=200, price_per_day__lt=500)
             elif price_filter == 'above_500':
                 cars_for_rent = cars_for_rent.filter(price_per_day__gte=500)
-
+        if mileage_filter:
+            cars_for_rent = cars_for_rent.filter(mileage__lte=mileage_filter)
         if search_query:
             cars_for_rent = cars_for_rent.filter(name__icontains=search_query)
 
-        # Fetch all brands for the filter dropdown
+        # Fetch all brands and oil types for dropdown filters
         brands = Brand.objects.all()
+        oil_types = OilType.objects.all()
 
-        return render(request, 'my_cars_for_rent.html', {
+        # Pass context data to the template
+        context = {
             'cars_for_rent': cars_for_rent,
             'brands': brands,
+            'oil_types': oil_types,
             'selected_brand': brand_filter,
+            'selected_oil_type': oil_type_filter,
             'selected_year': year_filter,
             'selected_price': price_filter,
+            'selected_mileage': mileage_filter,
             'search_query': search_query,
-        })
+        }
+
+        return render(request, 'my_cars_for_rent.html', context)
+
+
 
 
 
@@ -369,18 +393,45 @@ class DeleteCarForRentView(View):
         return redirect('my_cars_for_rent')
     
 
+class MyProfileView(View):
+    def get(self,request):
+        my_car_for_sale = CarForSale.objects.filter(user = request.user)
+        my_car_for_rent = CarForRent.objects.filter(user = request.user)
+        context = {
+            'my_car_for_rent':my_car_for_rent,
+            'my_car_for_sale':my_car_for_sale,
+            'user':request.user
+        }
+        # profile = CustomUser.objects.filter(user=request.user)
+        return render(request,'my_profile.html',context)
+    
+class EditMyProfileView(View):
+    def get(self,request):
+        
+        context ={
+            
+            'user':request.user
+        }
+        return render(request,'my_profile.html',context)
+    
+    def post(self,request):
+        user = request.user
+
+        user.username = request.POST.get('username', user.username)
+        user.email = request.POST.get('email', user.email)
+        user.phone = request.POST.get('phone', user.phone)
+        user.my_location_link = request.POST.get('my_location_link', user.my_location_link)
+        user.whatsapp_number = request.POST.get('whatsapp_number', user.whatsapp_number)
+
+        if 'profile_picture' in request.FILES:
+            user.profile_picture = request.FILES['profile_picture']
+        user.save()
+        return redirect('my_profile')  
+    
+class CarDetailView(View):
+    def get(self, request, car_id):
+        car = get_object_or_404(CarForSale, id=car_id)  # Fetch the specific car
+        return render(request, 'car_details.html', {'car': car})  # Use the correct template name
 
 
 
-
-
-
-
-# class ListAllCars(View):
-#     def get(self, request):
-#         list_all_car = CarForSale.objects.all()  
-#         return render(request, 'index.html', {'all_cars': list_all_car})
-# class ListMyCars(View):
-#     def get(self,request):
-#         list_my_cars = CarForSale.objects.filter(user = request.user)
-#         return render(request, 'index.html', {'my_cars': list_my_cars})

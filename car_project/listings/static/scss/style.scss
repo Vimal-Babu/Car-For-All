@@ -1,0 +1,21 @@
+
+
+// Colors
+$primary-color: #a0944e; // Yellow
+$secondary-color: #000000; // Black
+$text-color: #ffffff; // White
+
+// Font sizes
+$base-font-size: 16px;
+$small-font-size: 14px;
+
+// Mixin for reusable card style
+@mixin card-style {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+}
+body{
+    background-color: $primary-color;
+    text : $text-color;
+}

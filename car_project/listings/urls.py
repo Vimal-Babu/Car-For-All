@@ -21,7 +21,7 @@ Including another URLconf
 # ]
 
 # path('', views.home, name='home')
-from .views import UserLoginView,UserRegistrationView,HomeView,UserLogoutView,CarForSaleView,CarForRentView,CarForSaleDetailView,CarForRentDetailView,MyCarsForSaleView,MyCarsForRentView,  EditCarForSaleView, DeleteCarForSaleView,EditCarForRentView, DeleteCarForRentView
+from .views import UserLoginView,UserRegistrationView,HomeView,UserLogoutView,CarForSaleView,CarForRentView,CarForSaleDetailView,CarForRentDetailView,MyCarsForSaleView,MyCarsForRentView,  EditCarForSaleView, DeleteCarForSaleView,EditCarForRentView, DeleteCarForRentView,MyProfileView,EditMyProfileView,CarDetailView
 from django.urls import path
 
 urlpatterns = [
@@ -31,17 +31,18 @@ urlpatterns = [
     path('logout/',UserLogoutView.as_view(),name = 'logout'),
     path('add_car_for_sale/',CarForSaleView.as_view(),name='add_car_for_sale'),
     path('car_for_rent/',CarForRentView.as_view(),name='car_for_rent'),
-    # path('car_detail_view/',car_detail_view.as_view(),name='cardetail'),
+   
     path('car_for_sale_detail/', CarForSaleDetailView.as_view(), name='car_for_sale_detail'),
     path('car_for_rent_detail/', CarForRentDetailView.as_view(), name='car_for_rent_detail'),
     path('my_cars_for_sale/', MyCarsForSaleView.as_view(), name='my_cars_for_sale'),
     path('my_cars_for_rent/', MyCarsForRentView.as_view(), name='my_cars_for_rent'),
-    #path('my_cars_for_sale/', MyCarsForSaleView.as_view(), name='my_cars_for_sale'),
-    #path('my_cars_for_rent/', MyCarsForRentView.as_view(), name='my_cars_for_rent'),
-    #path('edit_car_for_sale/<int:pk>/', EditCarForSaleView.as_view(), name='edit_car_for_sale'),
-    #path('delete_car_for_sale/<int:pk>/', DeleteCarForSaleView.as_view(), name='delete_car_for_sale'),
+   
     path('edit-car-for-sale/<int:pk>/', EditCarForSaleView.as_view(), name='edit_car_for_sale'),
     path('delete-car-for-sale/<int:pk>/', DeleteCarForSaleView.as_view(), name='delete_car_for_sale'),
     path('edit-car-for-rent/<int:pk>/', EditCarForRentView.as_view(), name='edit_car_for_rent'),
     path('delete-car-for-rent/<int:pk>/', DeleteCarForRentView.as_view(), name='delete_car_for_rent'),
+
+    path('my_profile/',MyProfileView.as_view(),name='my_profile'),
+    path('edit_my_profile/',EditMyProfileView.as_view(),name='edit_my_profile'),
+    path('car/<int:car_id>/', CarDetailView.as_view(), name='car_detail'),  # Detail view for a car
 ]

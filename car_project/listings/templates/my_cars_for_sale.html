@@ -1,110 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}My Cars for Sale - CarSpace{% endblock %}
+{% block content %}
+<div class="container mt-5">
 
-<br><a href="{% url 'home' %}">go home </a><br><br><br>
-<h1>My Cars for Sale...</h1>
+    <h1>My Cars for Sale</h1>
 
-<!-- Filter Form -->
-<nav>
-    <form method="get" action="">
-        <select name="brand">
-            <option value="">Select Brand</option>
-            {% for brand in brands %}
-                <option value="{{ brand.id }}" {% if brand.id|stringformat:"d" == selected_brand %}selected{% endif %}>{{ brand.name }}</option>
+    
+    <nav>
+        <form method="get" action="">
+            <a href="{% url 'my_cars_for_sale' %}" class="btn btn-primary">back to the list</a>
+            <select name="brand">
+                <option value="">Select Brand</option>
+                {% for brand in brands %}
+                    <option value="{{ brand.id }}" {% if brand.id == selected_brand %}selected{% endif %}>{{ brand.name }}</option>
+                {% endfor %}
+            </select>
+            
+            <select name="year">
+                <option value="">Select Year</option>
+                <option value="below_3" {% if selected_year == 'below_3' %}selected{% endif %}>Below 3 Years</option>
+                <option value="3_to_5" {% if selected_year == '3_to_5' %}selected{% endif %}>3-5 Years</option>
+                <option value="5_to_10" {% if selected_year == '5_to_10' %}selected{% endif %}>5-10 Years</option>
+                <option value="above_10" {% if selected_year == 'above_10' %}selected{% endif %}>Above 10 Years</option>
+            </select>
+            
+            <select name="price">
+                <option value="">Select Price Range</option>
+                <option value="below_50k" {% if selected_price == 'below_50k' %}selected{% endif %}>Below 50k</option>
+                <option value="1L_to_3L" {% if selected_price == '1L_to_3L' %}selected{% endif %}>50k-3L</option>
+                <option value="3L_to_5L" {% if selected_price == '3L_to_5L' %}selected{% endif %}>3L-5L</option>
+                <option value="5L_to_10L" {% if selected_price == '5L_to_10L' %}selected{% endif %}>5L-10L</option>
+                <option value="above_10L" {% if selected_price == 'above_10L' %}selected{% endif %}>Above 10L</option>
+            </select>
+            
+            <input type="text" name="search" placeholder="Search by Car Name" value="{{ search_query|default:'' }}">
+
+            
+            <button type="submit">Filter</button>
+        </form>
+    </nav>
+    <br><br>   <br> 
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Car Name</th>
+                <th>Registration Number</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <p>Cars for Sale: {{ cars_for_sale }}</p> <!-- Debugging output -->
+<tbody>
+    {% for car in cars_for_sale %}
+    <tr>
+        <td>{{ car.name }}</td>
+        <td>{{ car.registration_number }}</td>
+        <td>₹{{ car.price }}</td>
+        <td>
+            <a href="{% url 'edit_car_for_sale' car.id %}" class="btn btn-warning btn-sm">Edit Car</a>
+            <form action="{% url 'delete_car_for_sale' car.id %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Delete Car</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No cars for sale.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
+        <!-- <tbody>
+            {% for car in cars_for_sale %}
+            <tr>
+                <td>{{ car.name }}</td>
+                <td>{{ car.registration_number }}</td>
+                <td>₹{{ car.price }}</td>
+                <td>
+                    <a href="{% url 'edit_car_for_sale' car.id %}" class="btn btn-warning btn-sm">Edit Car</a>
+                    <form action="{% url 'delete_car_for_sale' car.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete Car</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No cars for sale.</td>
+            </tr>
             {% endfor %}
-        </select>
-
-        <select name="year">
-            <option value="">Select Year</option>
-            <option value="below_3" {% if selected_year == 'below_3' %}selected{% endif %}>Below 3 Years</option>
-            <option value="3_to_5" {% if selected_year == '3_to_5' %}selected{% endif %}>3-5 Years</option>
-            <option value="5_to_10" {% if selected_year == '5_to_10' %}selected{% endif %}>5-10 Years</option>
-            <option value="above_10" {% if selected_year == 'above_10' %}selected{% endif %}>Above 10 Years</option>
-        </select>
-
-        <select name="price">
-            <option value="">Select Price Range</option>
-            <option value="below_50k" {% if selected_price == 'below_50k' %}selected{% endif %}>Below 50k</option>
-            <option value="1L_to_3L" {% if selected_price == '1L_to_3L' %}selected{% endif %}>50k-3L</option>
-            <option value="3L_to_5L" {% if selected_price == '3L_to_5L' %}selected{% endif %}>3L-5L</option>
-            <option value="5L_to_10L" {% if selected_price == '5L_to_10L' %}selected{% endif %}>5L-10L</option>
-            <option value="above_10L" {% if selected_price == 'above_10L' %}selected{% endif %}>Above 10L</option>
-        </select>
-
-        <input type="text" name="search" placeholder="Search by Car Name" value="{{ search_query }}">
-        <button type="submit">Filter</button>
-    </form>
-</nav>
-
-<table>
-    <thead>
-        <tr>
-            <th>Car Name</th>
-            <th>Registration Number</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for car in cars_for_sale %}
-        <tr>
-            <td>{{ car.name }}</td>
-            <td>{{ car.registration_number }}</td>
-            <td>{{ car.price }}</td>
-            <td>
-                <a href="{% url 'edit_car_for_sale' car.id %}">Edit Car</a>
-                <form action="{% url 'delete_car_for_sale' car.id %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Delete Car</button>
-                </form>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No cars for sale.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </tbody> -->
+    </table>
+</div>
+{% endblock %}
 
 
 
-
-
-
-
-
-
-
-
-
-
-<!-- <h1>My Cars for Sale...</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Car Name</th>
-            <th>Registration Number</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for car in cars_for_sale %}
-        <tr>
-            <td>{{ car.name }}</td>
-            <td>{{ car.registration_number }}</td>
-            <td>{{ car.price }}</td>
-            <td>
-                <a href="{% url 'edit_car_for_sale' car.id %}">Edit Car</a>
-                <form action="{% url 'delete_car_for_sale' car.id %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Delete Car</button>
-                </form>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">No cars for sale.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table> -->
