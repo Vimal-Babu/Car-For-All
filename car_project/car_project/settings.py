@@ -85,7 +85,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'carforall',
-        'USER': 'vimal',           # Your OS username
+        'USER': 'postgres',           # Your OS username
         'PASSWORD': '3609',            # Leave blank for peer authentication
         'HOST': 'localhost',
         'PORT': '5432',
